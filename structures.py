@@ -2,10 +2,9 @@
 
 
 class Vertex():
-    def __init__(self,id,edges,neighbors,degree):
+    def __init__(self,id,edges,degree):
         self.id = id
         self.edges = edges
-        self.neighbors = neighbors
         self.degree = degree
 
 
@@ -17,6 +16,9 @@ class Edge():
         self.end = end
         self.weight = weight
 
+    def print(self):
+        print("Edge "+str(self.id)+", from V"+str(self.start.id)+" to V"+str(self.end.id))
+
 
 
 class Graph():
@@ -25,3 +27,8 @@ class Graph():
         self.edges = edges
         self.nbVertices = nbVertices
         self.nbEdges = nbEdges
+
+    def print(self):
+        print(self.nbVertices,"Vertices",self.nbEdges,"Edges")
+        for edge in self.edges:
+            edge.print()

@@ -1,4 +1,7 @@
+from structures import *
+from parsers import *
 
 
 
-print("We have purposely trained him wrong, as a joke")
+graph = loadGraph("data/vingtSommets.txt")
+graph.print()
