@@ -17,7 +17,7 @@ class Edge():
         self.weight = weight
 
     def print(self):
-        print("Edge "+str(self.id)+", from V"+str(self.start.id)+" to V"+str(self.end.id))
+        print("Edge "+str(self.id)+", from V"+str(self.start.id)+" to V"+str(self.end.id)+", weight:",self.weight)
 
 
 
@@ -32,3 +32,10 @@ class Graph():
         print(self.nbVertices,"Vertices",self.nbEdges,"Edges")
         for edge in self.edges:
             edge.print()
+
+    def getValueFromSolution(self,binaryArray):
+        value = 0
+        for edge in self.edges:
+            if binaryArray[edge.start.id] != binaryArray[edge.end.id]:
+                value += edge.weight
+        return value
