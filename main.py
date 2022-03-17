@@ -8,3 +8,4 @@ graph = loadGraph("data/vingtSommets.txt")
 optimalSolution = exhaustiveSearch(graph)
 print(optimalSolution)
 print(graph.getValueFromSolution(optimalSolution))
+#push test
