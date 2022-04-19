@@ -1,11 +1,13 @@
 from structures import *
 from parsers import *
 from exhaustive import *
+from neighborhoods import *
+from greedy import *
+
 
 
 
 graph = loadGraph("data/vingtSommets.txt")
-optimalSolution = exhaustiveSearch(graph)
-print(optimalSolution)
-print(graph.getValueFromSolution(optimalSolution))
-#push test 2
+solution = greedySearchSC(graph)
+print(solution)
+print(graph.getValueFromSolution(solution))
