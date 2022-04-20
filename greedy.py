@@ -13,7 +13,7 @@ def greedySearch(graph,initialSolution,neighborhoodFunction):
     currentSolution = initialSolution
     currentValue = graph.getValueFromSolution(currentSolution)
 
-    #on fait des descentes tant que la soltution s'améliore
+    #on fait des descentes tant que la solution s'améliore
     valueCanImprove = True
     while valueCanImprove:
 
