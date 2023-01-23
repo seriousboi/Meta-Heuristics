@@ -2,16 +2,15 @@ from copy import copy
 
 
 
-def getSwapNeighborhood(binaryArray):
+def getSwapNeighborhood(solution):
     neighborhood = []
 
     #on fait une double boucle sur le tableau avec swapIndex1 < swapIndex2 pour éviter les symétries
-    for swapIndex1 in range(len(binaryArray)):
-        for swapIndex2 in range(swapIndex1+1,len(binaryArray)):
+    for swapIndex1 in range(len(solution)):
+        for swapIndex2 in range(swapIndex1+1,len(solution)):
 
-            #ici on se sert du fait que on a que deux classes, si deux éléments du tableau sont différents on peut les échanger pour obtenir une solution dans le voisinage swap
-            if binaryArray[swapIndex1] != binaryArray[swapIndex2]:
-                neighbor = copy(binaryArray)
+            if solution[swapIndex1] != solution[swapIndex2]:
+                neighbor = copy(solution)
 
                 temp = neighbor[swapIndex1]
                 neighbor[swapIndex1] = neighbor[swapIndex2]

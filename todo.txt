@@ -1,0 +1,12 @@
+récupérer fichiers d'instances récents
+
+choisir le problème à traiter, 2 classes ou n classes
+choisir définition d'équité, restreinte pour moins grand espace de solution, large pour avoir meilleur accès aux optimums locaux
+choisir seconde métaheuristique
+
+le fonction voisinage swap est bonne pour n classes
+la recherche exhaustive, glouton sont à refaire
+glouton?
+
+utiliser int_max plutot que 1000000000
+ajouter mesure du temps dans les tests
