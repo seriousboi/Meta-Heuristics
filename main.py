@@ -7,4 +7,7 @@ from tests import *
 
 
 # test
-runTests()
+graph = loadGraph('data/vingtSommets.txt')
+
+graph.print()
+#runTests()
