@@ -1,7 +1,7 @@
 from parsers import *
 from exhaustive import *
 from neighborhoods import *
-from greedy import *
+from gradients import *
 
 
 
@@ -18,12 +18,13 @@ def runTests():
         graph = loadGraph("data/"+filename)
         print(filename)
 
-        greedySolution = greedySearchSC(graph)
+        initialSolution = [0]*(graph.nbVertices - graph.nbVertices//2) + [1]*(graph.nbVertices//2)
+        greedySolution = gradient(graph,initialSolution,swapNeighborhood)
+        print("Greedy gradient:",graph.getValueFromSolution(greedySolution))
         print(greedySolution)
-        print(graph.getValueFromSolution(greedySolution))
 
         exhaustiveSolution = exhaustiveSearch(graph)
+        print("Exhaustive search:",graph.getValueFromSolution(exhaustiveSolution))
         print(exhaustiveSolution)
-        print(graph.getValueFromSolution(exhaustiveSolution))
 
         print()

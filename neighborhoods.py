@@ -2,7 +2,7 @@ from copy import copy
 
 
 
-def getSwapNeighborhood(solution):
+def swapNeighborhood(solution):
     neighborhood = []
 
     #on fait une double boucle sur le tableau avec swapIndex1 < swapIndex2 pour éviter les symétries
@@ -16,5 +16,5 @@ def getSwapNeighborhood(solution):
                 neighbor[swapIndex1] = neighbor[swapIndex2]
                 neighbor[swapIndex2] = temp
 
-                neighborhood += [neighbor]
-    return neighborhood
+                #il n'y a pas besoin de vérifier la validité des voisins du voisinage swap pour ce problème
+                yield neighbor
