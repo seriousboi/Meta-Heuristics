@@ -5,26 +5,44 @@ from gradients import *
 
 
 
-filenames = ['quatreSommets.txt','cinqSommets.txt','dixSommets.txt','quinzeSommets.txt','dixSeptSommets.txt',
-             'vingtSommets.txt','vingtEtunSommets.txt','vingtDeuxSommets.txt','vingtTroisSommets.txt','vingtQuatreSommets.txt','vingtCinqSommets.txt',
-             'trenteSommets.txt','cinquanteSommets.txt','centSommets.txt','cinqCentSommets.txt','milleSommets.txt']
+filenames = [
+'quatreSommets.txt','cinqSommets.txt','dixSommets.txt','quinzeSommets.txt','dixSeptSommets.txt',
+'vingtSommets.txt','vingtEtunSommets.txt','vingtDeuxSommets.txt','vingtTroisSommets.txt','vingtQuatreSommets.txt','vingtCinqSommets.txt',
+'trenteSommets.txt','cinquanteSommets.txt','centSommets.txt','cinqCentSommets.txt','milleSommets.txt'
+]
 
 
 
-def runTests():
+def testExhaustive(nbClasses,maxIterations = None):
     global filenames
+
+    if maxIterations == None:
+        maxIterations = len(filenames)
+
+    print("Exhaustive search,",nbClasses," classes:")
+    for step in range(maxIterations):
+        filename = filenames[step]
+
+        graph = loadGraph("data/"+filename)
+        print(filename)
+
+        exhaustiveSolution = exhaustiveSearch(graph)
+        print(graph.getValueFromSolution(exhaustiveSolution))
+        print(exhaustiveSolution)
+        print()
+
+
+
+def testGradient(nbClasses,neighborhoodFunction,maxTime,nbImprovToBreak = None):
+    global filenames
+
+    print("Greedy gradient,",nbClasses," classes:")
 
     for filename in filenames:
         graph = loadGraph("data/"+filename)
         print(filename)
 
-        initialSolution = [0]*(graph.nbVertices - graph.nbVertices//2) + [1]*(graph.nbVertices//2)
-        greedySolution = gradient(graph,initialSolution,swapNeighborhood)
-        print("Greedy gradient:",graph.getValueFromSolution(greedySolution))
-        print(greedySolution)
-
-        exhaustiveSolution = exhaustiveSearch(graph)
-        print("Exhaustive search:",graph.getValueFromSolution(exhaustiveSolution))
-        print(exhaustiveSolution)
-
+        gradientSolution = gradient(graph,nbClasses,swapNeighborhood,maxTime,nbImprovToBreak)
+        print("Gradient:",graph.getValueFromSolution(gradientSolution))
+        print(gradientSolution)
         print()
