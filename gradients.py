@@ -1,8 +1,48 @@
 from neighborhoods import *
+from random import choice
+from time import time
 
 
 
-def gradient(graph,initialSolution,neighborhoodFunction,nbImprovToBreak = None):
+def gradient(graph,nbClasses,neighborhoodFunction,maxTime,nbImprovToBreak = None):
+    startTime = time()
+    timeLeft = maxTime
+
+    bestSolution = None
+    bestValue = 1000000000
+
+    while timeLeft >= 0:
+
+        randomSolution = getRandomSolution(graph.nbVertices,nbClasses)
+        newSolution = gradientDescent(graph,randomSolution,neighborhoodFunction,nbImprovToBreak)
+
+        newValue = graph.getValueFromSolution(newSolution)
+        if newValue < bestValue:
+
+            bestSolution = newSolution
+            bestValue = newValue
+
+        timeLeft = maxTime - (time() - startTime)
+
+    return bestSolution
+
+
+def getRandomSolution(nbVertices,nbClasses):
+    verticesToAssign = [index for index in range(nbVertices)]
+    solution = [None]*nbVertices
+
+    for step in range(nbVertices):
+        classIndex = step%nbClasses
+        vertexToAssign = choice(verticesToAssign)
+
+        solution[vertexToAssign] = classIndex
+        verticesToAssign.remove(vertexToAssign)
+
+    return solution
+
+
+
+def gradientDescent(graph,initialSolution,neighborhoodFunction,nbImprovToBreak):
     currentSolution = initialSolution
     currentValue = graph.getValueFromSolution(currentSolution)
 

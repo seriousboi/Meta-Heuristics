@@ -6,4 +6,4 @@ from gradients import *
 from tests import *
 
 
-runTests()
+testGradient(4,swapNeighborhood,4,10)

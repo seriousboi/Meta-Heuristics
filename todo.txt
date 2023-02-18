@@ -5,10 +5,8 @@ permissivité = 2 semble bon pour tout n classes
 
 -la recherche exhaustive
 
--voisinage PnD pour n classes
+-calcul du cout dans le générateur
 -checkeur de solutions
--mesure du temps
--restriction de temps
--descentes mutiples depuis solutions aléatoires
+-voisinage PnD pour n classes
 
 -choisir seconde métaheuristique
