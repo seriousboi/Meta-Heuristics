@@ -1,4 +1,6 @@
 from parsers import *
+from structures import *
+from checker import *
 from exhaustive import *
 from neighborhoods import *
 from gradients import *
@@ -13,13 +15,14 @@ filenames = [
 
 
 
-def testExhaustive(nbClasses,maxIterations = None):
+def testExhaustive(nbClasses,equityMax,maxIterations = None):
     global filenames
 
     if maxIterations == None:
         maxIterations = len(filenames)
 
     print("Exhaustive search,",nbClasses," classes:")
+    print()
     for step in range(maxIterations):
         filename = filenames[step]
 
@@ -27,22 +30,29 @@ def testExhaustive(nbClasses,maxIterations = None):
         print(filename)
 
         exhaustiveSolution = exhaustiveSearch(graph)
-        print(graph.getValueFromSolution(exhaustiveSolution))
+        print("Cost",graph.getValueFromSolution(exhaustiveSolution))
         print(exhaustiveSolution)
+
+        if not checkSolution(exhaustiveSolution,nbClasses,True,equityMax):
+            print("/!\ invalid solution /!\ ")
         print()
 
 
 
-def testGradient(nbClasses,neighborhoodFunction,maxTime,nbImprovToBreak = None):
+def testGradient(nbClasses,equityMax,neighborhoodFunction,maxTime,nbImprovToBreak = None):
     global filenames
 
     print("Greedy gradient,",nbClasses," classes:")
+    print()
 
     for filename in filenames:
         graph = loadGraph("data/"+filename)
         print(filename)
 
         gradientSolution = gradient(graph,nbClasses,swapNeighborhood,maxTime,nbImprovToBreak)
-        print("Gradient:",graph.getValueFromSolution(gradientSolution))
+        print("Cost",graph.getValueFromSolution(gradientSolution))
         print(gradientSolution)
+
+        if not checkSolution(gradientSolution,nbClasses,True,equityMax):
+            print("/!\ invalid solution /!\ ")
         print()
