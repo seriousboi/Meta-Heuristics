@@ -70,11 +70,8 @@ def gradientIterarion(graph,currentSolution,neighborhoodFunction,nbImprovToBreak
     initialValue = currentValue
 
     #le type de voisinage est modulable dans les paramètres
-    neighborhood = neighborhoodFunction(currentSolution)
-    for neighbor in neighborhood:
-
-        #les couts sont souvent recalculés, à améliorer
-        neighborValue = graph.getValueFromSolution(neighbor)
+    neighborhood = neighborhoodFunction(graph,currentSolution,initialValue)
+    for neighbor,neighborValue in neighborhood:
 
         #on incrémente le compteur d'améliorations
         if  neighborValue < initialValue:

@@ -6,7 +6,6 @@ permissivité = 2 semble bon pour tout n classes
 -la recherche exhaustive
 
 -calcul du cout dans le générateur
--checkeur de solutions
 -voisinage PnD pour n classes
 
 -choisir seconde métaheuristique
