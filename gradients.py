@@ -24,7 +24,10 @@ def gradient(graph,nbClasses,neighborhoodFunction,maxTime,nbImprovToBreak = None
 
         timeLeft = maxTime - (time() - startTime)
 
-    return bestSolution
+    totalTime = time() - startTime
+    
+    return bestSolution,totalTime
+
 
 
 def getRandomSolution(nbVertices,nbClasses):

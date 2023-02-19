@@ -16,10 +16,12 @@ def swapNeighborhood(graph,solution,value):
                 neighbor[swapIndex1] = neighbor[swapIndex2]
                 neighbor[swapIndex2] = temp
 
+                #on calcule le coût de la solution voisine en ne regardant que les changements sur les arretes des sommets swappés
+                neighborValue = value
                 class1 = solution[swapIndex1]
                 class2 = solution[swapIndex2]
-                neighborValue = value
 
+                #changements sur les arretes du sommet 1
                 for edge in graph.vertices[swapIndex1].edges:
                     opppositeVertexIndex = getOppositeEndOfEdge(swapIndex1,edge).id
 
@@ -29,6 +31,7 @@ def swapNeighborhood(graph,solution,value):
                         if neighbor[opppositeVertexIndex] == class2:
                             neighborValue -= edge.weight
 
+                #changements sur les arretes du sommet 2
                 for edge in graph.vertices[swapIndex2].edges:
                     opppositeVertexIndex = getOppositeEndOfEdge(swapIndex2,edge).id
 

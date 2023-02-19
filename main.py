@@ -8,5 +8,5 @@ from tests import *
 
 
 
-testGradient(2,15,swapNeighborhood,4,10)
+testGradient(2,15,swapNeighborhood,10,10)
 #testExhaustive(2,2,5)

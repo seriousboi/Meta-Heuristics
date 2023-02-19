@@ -49,8 +49,9 @@ def testGradient(nbClasses,equityMax,neighborhoodFunction,maxTime,nbImprovToBrea
         graph = loadGraph("data/"+filename)
         print(filename)
 
-        gradientSolution = gradient(graph,nbClasses,swapNeighborhood,maxTime,nbImprovToBreak)
-        print("Cost",graph.getValueFromSolution(gradientSolution))
+        gradientSolution,timeTaken = gradient(graph,nbClasses,swapNeighborhood,maxTime,nbImprovToBreak)
+        print("Cost:",graph.getValueFromSolution(gradientSolution))
+        print("Time:",timeTaken,"seconds")
         print(gradientSolution)
 
         if not checkSolution(gradientSolution,nbClasses,True,equityMax):
