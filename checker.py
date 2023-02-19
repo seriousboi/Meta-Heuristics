@@ -25,7 +25,7 @@ def checkSolution(solution,nbClasses,verbose = False,equityMax = 2):
             max = count
 
     #on vérifie l'équité
-    if not (max - min)/max <=  equityMax:
+    if not abs(max - min) <=  equityMax:
         if verbose:
             print("Equity not respected, difference between",min,"and",max,"is above",equityMax,"%")
         return False
