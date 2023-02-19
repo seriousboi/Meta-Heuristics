@@ -15,7 +15,7 @@ filenames = [
 
 
 
-def testExhaustive(nbClasses,equityMax,maxIterations = None):
+def testExhaustive(nbClasses,equityMax,maxTime = None,maxIterations = None):
     global filenames
 
     if maxIterations == None:
@@ -29,7 +29,7 @@ def testExhaustive(nbClasses,equityMax,maxIterations = None):
         graph = loadGraph("data/"+filename)
         print(filename)
 
-        exhaustiveSolution = exhaustiveSearch(graph)
+        exhaustiveSolution = exhaustiveSearch(graph,nbClasses,maxTime)
         print("Cost",graph.getValueFromSolution(exhaustiveSolution))
         print(exhaustiveSolution)
 

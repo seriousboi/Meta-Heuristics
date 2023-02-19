@@ -1,21 +1,21 @@
+from checker import *
 from copy import copy
 
 
 
-def exhaustiveSearch(graph):
+def exhaustiveSearch(graph,nbClasses,maxTime):
     currentSolution = [0]*graph.nbVertices
     bestSolution = None
     bestValue = 1000000000
-    partitionSize = graph.nbVertices//2
 
-    finalArray = [1]*graph.nbVertices
+    finalArray = [nbClasses-1]*graph.nbVertices
     while currentSolution != finalArray:
 
         #sous optimal, on parcourt tout les mots binaires possibles
-        getNextBinaryArray(currentSolution)
+        nextSolution(currentSolution,nbClasses)
 
         #sous optimal, on recalcule la taille de la partition à chaque fois
-        if getPartitionSize(currentSolution) == partitionSize:
+        if checkSolution(currentSolution,nbClasses,False,2):
 
             #sous optimal, on recalcule tout le coût à chaque fois
             currentValue = graph.getValueFromSolution(currentSolution)
@@ -29,19 +29,10 @@ def exhaustiveSearch(graph):
 
 
 
-def getPartitionSize(binaryArray):
-    partitionSize = 0
-    for index in range(len(binaryArray)):
-        partitionSize += binaryArray[index]
-    return partitionSize
-
-
-
-def getNextBinaryArray(binaryArray):
-    for index in range(len(binaryArray)):
-
-        if binaryArray[index] == 1:
-            binaryArray[index] = 0
+def nextSolution(solution,nbClasses):
+    for index in range(len(solution)):
+        if solution[index] == nbClasses-1:
+            solution[index] = 0
         else:
-            binaryArray[index] = 1
+            solution[index] += 1
             return
