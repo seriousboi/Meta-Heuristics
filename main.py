@@ -7,6 +7,10 @@ from gradients import *
 from tests import *
 
 
+nbClasses = 2
+equityMax = 2
+maxTime = 5 #temps max en secondes
 
-#testGradient(2,15,swapNeighborhood,10,10)
-testExhaustive(2,2,60)
+
+testExhaustive(nbClasses,equityMax,maxTime)
+testGradient(nbClasses,equityMax,swapNeighborhood,maxTime)

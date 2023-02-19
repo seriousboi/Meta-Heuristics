@@ -21,7 +21,7 @@ def testExhaustive(nbClasses,equityMax,maxTime = None,maxIterations = None):
     if maxIterations == None:
         maxIterations = len(filenames)
 
-    print("Exhaustive search,",nbClasses," classes:")
+    print("Exhaustive search,",nbClasses,"classes:")
     print()
     for step in range(maxIterations):
         filename = filenames[step]
@@ -48,7 +48,7 @@ def testExhaustive(nbClasses,equityMax,maxTime = None,maxIterations = None):
 def testGradient(nbClasses,equityMax,neighborhoodFunction,maxTime,nbImprovToBreak = None):
     global filenames
 
-    print("Greedy gradient,",nbClasses," classes:")
+    print("Greedy gradient,",nbClasses,"classes:")
     print()
 
     for filename in filenames:
