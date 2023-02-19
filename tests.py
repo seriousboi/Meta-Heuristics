@@ -29,12 +29,18 @@ def testExhaustive(nbClasses,equityMax,maxTime = None,maxIterations = None):
         graph = loadGraph("data/"+filename)
         print(filename)
 
-        exhaustiveSolution = exhaustiveSearch(graph,nbClasses,maxTime)
-        print("Cost",graph.getValueFromSolution(exhaustiveSolution))
-        print(exhaustiveSolution)
+        exhaustiveSolution,timeTaken = exhaustiveSearch(graph,nbClasses,maxTime)
+        if exhaustiveSolution == None:
+            print("No solution found in",maxTime,"seconds")
+        else:
+            print("Cost:",graph.getValueFromSolution(exhaustiveSolution))
+            print("Time:",timeTaken,"seconds")
+            if timeTaken >= maxTime:
+                print("Not finished")
+            print(exhaustiveSolution)
+            if not checkSolution(exhaustiveSolution,nbClasses,True,equityMax):
+                print("/!\ invalid solution /!\ ")
 
-        if not checkSolution(exhaustiveSolution,nbClasses,True,equityMax):
-            print("/!\ invalid solution /!\ ")
         print()
 
 

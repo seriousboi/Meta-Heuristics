@@ -1,9 +1,12 @@
 from checker import *
+from time import time
 from copy import copy
 
 
 
 def exhaustiveSearch(graph,nbClasses,maxTime):
+    startTime = time()
+
     currentSolution = [0]*graph.nbVertices
     bestSolution = None
     bestValue = 1000000000
@@ -25,7 +28,13 @@ def exhaustiveSearch(graph,nbClasses,maxTime):
                 bestSolution = copy(currentSolution)
                 bestValue = currentValue
 
-    return bestSolution
+        timeLeft = maxTime - (time() - startTime)
+        if timeLeft <= 0:
+            totalTime = time() - startTime
+            return bestSolution,totalTime
+
+    totalTime = time() - startTime
+    return bestSolution,totalTime
 
 
 
