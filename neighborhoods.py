@@ -1,5 +1,6 @@
 from copy import copy
-
+from random import choice, shuffle
+from checker import checkSolution
 
 
 def swapNeighborhood(graph,solution,value):
@@ -44,6 +45,30 @@ def swapNeighborhood(graph,solution,value):
                 #il n'y a pas besoin de vérifier la validité des voisins du voisinage swap pour ce problème
                 yield neighbor,neighborValue
 
+
+def randomPickNDropNeighborhood(graph, solution, value, nbClasses, equityMax):
+    """
+    Function to compute a random neighbor of a given solution using Pick'n'Drop.
+    """
+    vertices = [i for i in range(len(solution))]
+    shuffle(vertices) # Randomly shuffle the vertices index in solution
+    possible_classes = [i for i in range(nbClasses)] # All the classes
+    for v in vertices:
+        possible_classes_v = copy(possible_classes)
+        possible_classes_v.remove(solution[v]) # All the POSSIBLE classes (i.e. without the current class of vertex 'v')
+        shuffle(possible_classes_v) # Randomly shuffle the possible classes
+        for c in possible_classes_v:
+            neighbor = copy(solution)
+            neighbor[v] = c
+            if checkSolution(neighbor, nbClasses, False, equityMax):
+                neighborValue = value
+                for edge in graph.vertices[v].edges:
+                    opppositeVertexIndex = getOppositeEndOfEdge(v, edge).id
+                    if neighbor[opppositeVertexIndex] == solution[v]:
+                        neighborValue += edge.weight
+                    if neighbor[opppositeVertexIndex] == c:
+                        neighborValue -= edge.weight
+                return neighbor, neighborValue
 
 
 def getOppositeEndOfEdge(vertexId,edge):

@@ -1,7 +1,5 @@
 from structures import *
 
-
-
 def loadGraph(filePath):
     file = open(filePath,"r")
     lines = file.readlines()

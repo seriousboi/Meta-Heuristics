@@ -1,7 +1,4 @@
-
-
-
-def checkSolution(solution,nbClasses,verbose = False,equityMax = 2):
+def checkSolution(solution, nbClasses, verbose = False, equityMax = 2):
     #usage d'un dictionaire pour que les solutions ne soient pas contraintes à avoir des entiers de 0 à nbClasses-1 mais à simplement avoir nbClasses types d'éléments différents
     classCounts = {}
 
