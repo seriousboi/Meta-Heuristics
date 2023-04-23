@@ -1,11 +1,10 @@
-from gradients import getRandomSolution
 from random import choice, random
 from time import perf_counter
-from structures import *
-from math import exp
+from math import exp, log
 
 
-def simulatedAnnealingSimulation(graph, nbClasses, equityMax, neighborhoodFunction, initialTemperature, shutdownTemperature, positiveDecreasingFunction, nbIterMax, maxTime):
+def simulatedAnnealingSimulation(graph, nbClasses, equityMax, neighborhoodFunction, initialTemperature, nbChangeTemperature, \
+MU, positiveDecreasingFunction, nbIterMax, getInitialSolution, maxTime):
     startTime = perf_counter()
     timeLeft = maxTime
 
@@ -13,9 +12,9 @@ def simulatedAnnealingSimulation(graph, nbClasses, equityMax, neighborhoodFuncti
     bestValue = sum([e.weight for e in graph.edges]) # We take at maximum the sum of the weight of the edges of 'graph'
 
     while timeLeft >= 0:
-        randomSolution = getRandomSolution(graph.nbVertices, nbClasses) # Meets the criterion of fairness by definition
+        randomSolution = getInitialSolution(graph, nbClasses, equityMax) # Meets the criterion of fairness by definition
         newSolution, newValue = simulatedAnnealing(graph, nbClasses, equityMax, randomSolution, neighborhoodFunction, \
-        initialTemperature, shutdownTemperature, positiveDecreasingFunction, nbIterMax, timeLeft)
+        initialTemperature, nbChangeTemperature, MU, positiveDecreasingFunction, nbIterMax, timeLeft)
         if newValue < bestValue:
             bestSolution = newSolution
             bestValue = newValue
@@ -27,7 +26,8 @@ def simulatedAnnealingSimulation(graph, nbClasses, equityMax, neighborhoodFuncti
     return bestSolution, bestValue, totalTime
 
 
-def simulatedAnnealing(graph, nbClasses, equityMax, initialSolution, neighborhoodFunction, initialTemperature, shutdownTemperature, positiveDecreasingFunction, nbIterMax, timeLeft):
+def simulatedAnnealing(graph, nbClasses, equityMax, initialSolution, neighborhoodFunction, initialTemperature, nbChangeTemperature, MU, \
+positiveDecreasingFunction, nbIterMax, timeLeft):
     """
     Function to compute an approach solution of the best graph partition in nbClasses while using simulated annealing algorithm.
     """
@@ -36,6 +36,9 @@ def simulatedAnnealing(graph, nbClasses, equityMax, initialSolution, neighborhoo
     bestSolution = initialSolution
     currentValue = graph.getValueFromSolution(currentSolution)
     bestValue = currentValue
+    if initialTemperature == None:
+        initialTemperature = computeInitialTemperature(graph, nbClasses, equityMax, currentSolution, currentValue, neighborhoodFunction, 0.65) # initialTemperature
+    shutdownTemperature = initialTemperature * MU**nbChangeTemperature
     T = initialTemperature
     while T > shutdownTemperature:
         nbIter = 0
@@ -57,3 +60,68 @@ def simulatedAnnealing(graph, nbClasses, equityMax, initialSolution, neighborhoo
         T = positiveDecreasingFunction(T)
 
     return bestSolution, bestValue
+
+
+def computeInitialTemperature(graph, nbClasses, equityMax, initialSolution, initialValue, neighborhoodFunction, acceptanceRate):
+    """
+    Function to compute initial temperature from 'acceptanceRate' for simulated annealing algorithm.
+    """
+    neighbors = neighborhoodFunction(graph, initialSolution, initialValue, nbClasses, equityMax, random = False) # All the neighbors
+    n = 0
+    fitnessGap = []
+    neighbors = list(neighbors)
+    while n < (0.1 * len(neighbors) or n < 5): # n > 5 to get some of them
+        fitnessGap.append(initialValue - neighbors[n][1]) # neighborValue
+        n += 1
+
+    sumFitnessGap = sum(fitnessGap)
+    if sumFitnessGap: # i.e. different from 0
+        meanFitnessGap =  sumFitnessGap / len(fitnessGap)
+        return - meanFitnessGap / log(acceptanceRate)
+    else: # i.e. = 0
+        return 1000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#

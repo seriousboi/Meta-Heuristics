@@ -2,7 +2,7 @@ from parsers import loadGraph
 from structures import Graph
 from checker import checkSolution
 from exhaustive import exhaustiveSearch
-from gradients import gradient, getRandomSolution
+from gradients import gradient
 from simulatedAnnealing import simulatedAnnealingSimulation
 from tabu import tabuSimulation
 from implicit import implicitSearch
@@ -18,63 +18,61 @@ filenames = [
 
 # filenames = listdir(folder)
 
-def testExhaustive(nbClasses,equityMax,maxTime = None,maxIterations = None):
-    global filenames
+def testExhaustive(nbClasses, equityMax, maxTime = None, maxIterations = None):
 
     if maxIterations == None:
         maxIterations = len(filenames)
 
-    print("Exhaustive search,",nbClasses,"classes:")
-    print()
+    print(f"Exhaustive search with {nbClasses} classes: \n")
+
     for step in range(maxIterations):
         filename = filenames[step]
 
         graph = loadGraph(f"{folder}/{filename}")
         print(filename)
 
-        exhaustiveSolution,timeTaken = exhaustiveSearch(graph,nbClasses,maxTime)
+        exhaustiveSolution, exhaustiveValue, timeTaken, nbVisited = exhaustiveSearch(graph, nbClasses, maxTime)
         if exhaustiveSolution == None:
-            print("No solution found in",maxTime,"seconds")
+            print(f"No solution found in {maxTime} seconds.")
         else:
-            print("Cost:",graph.getValueFromSolution(exhaustiveSolution))
-            print("Time:",timeTaken,"seconds")
+            print(f"Cost: {exhaustiveValue}")
+            print(f"Time: {timeTaken} seconds")
+            print(f"Number of solutions visited: {nbVisited}")
             if timeTaken >= maxTime:
                 print("Not finished")
             print(exhaustiveSolution)
-            if not checkSolution(exhaustiveSolution,nbClasses,True,equityMax):
+            if not checkSolution(exhaustiveSolution, nbClasses, True, equityMax):
                 print("/!\ invalid solution /!\ ")
 
-        print()
+        print('\n')
 
 
 
-def testGradient(nbClasses,equityMax,neighborhoodFunction,maxTime,nbImprovToBreak = None):
-    global filenames
+def testGradient(nbClasses, equityMax, neighborhoodFunction, maxTime, nbImprovToBreak = None, useBlocks = False):
 
-    print("Greedy gradient,",nbClasses,"classes:")
-    print()
+    print(f"Gradient with {nbClasses} classes: \n")
 
     for filename in filenames:
         graph = loadGraph(f"{folder}/{filename}")
         print(filename)
 
-        gradientSolution,timeTaken = gradient(graph,nbClasses, neighborhoodFunction, maxTime, nbImprovToBreak)
-        print(f"Cost: {graph.getValueFromSolution(gradientSolution)}")
+        gradientSolution, gradientValue, timeTaken = gradient(graph, nbClasses, neighborhoodFunction, maxTime, nbImprovToBreak)
+        print(f"Cost: {gradientValue}")
         print(f"Time: {timeTaken} seconds")
         print(gradientSolution)
 
-        if not checkSolution(gradientSolution,nbClasses,True,equityMax):
+        if not checkSolution(gradientSolution, nbClasses, True, equityMax):
             print("/!\ invalid solution /!\ ")
-        print()
+
+        print('\n')
 
 
-def testSimulatedAnnealing(nbClasses, equityMax, neighborhoodFunction, initialTemperature, nbChangeTemperature, MU, nbIterMaxFunction, maxTime):
+def testSimulatedAnnealing(nbClasses, equityMax, neighborhoodFunction, initialTemperature, nbChangeTemperature, MU, nbIterMaxFunction, getInitialSolution, maxTime):
     """
     Function to launch simulated annealing algorithm over the files.
     """
     print(f"Simulated annealing with {nbClasses} classes: \n")
 
-    shutdownTemperature = 1000 * MU**nbChangeTemperature
     g = lambda T: MU * T # Positive decreasing function
 
     for filename in filenames:
@@ -83,7 +81,7 @@ def testSimulatedAnnealing(nbClasses, equityMax, neighborhoodFunction, initialTe
 
         nbIterMax = nbIterMaxFunction(graph.nbVertices)
         simulatedAnnealingSolution, simulatedAnnealingValue, timeTaken = simulatedAnnealingSimulation(graph, nbClasses, equityMax, neighborhoodFunction, \
-        initialTemperature, shutdownTemperature, g, nbIterMax, maxTime)
+        initialTemperature, nbChangeTemperature, MU, g, nbIterMax, getInitialSolution, maxTime)
 
         print(f"Cost: {simulatedAnnealingValue}")
         print(f"Time: {timeTaken} seconds")
@@ -96,18 +94,18 @@ def testSimulatedAnnealing(nbClasses, equityMax, neighborhoodFunction, initialTe
         print('\n')
 
 
-def testTabu(nbClasses, equityMax, neighborhoodFunction, tabuListSize, nbIterMaxFunction, maxTime):
+def testTabu(nbClasses, equityMax, neighborhoodFunction, tabuListSize, nbIterMaxFunction, getInitialSolution, maxTime):
     """
     Function to launch tabu search algorithm over the files.
     """
-    print(f"Tabu with {nbClasses} classes: \n")
+    print(f"Tabu search with {nbClasses} classes: \n")
 
     for filename in filenames:
         graph = loadGraph(f"{folder}/{filename}")
         print(filename)
 
         nbIterMax = nbIterMaxFunction(graph.nbVertices)
-        tabuSolution, tabuValue, timeTaken = tabuSimulation(graph, nbClasses, equityMax, neighborhoodFunction, tabuListSize, nbIterMax, maxTime)
+        tabuSolution, tabuValue, timeTaken = tabuSimulation(graph, nbClasses, equityMax, neighborhoodFunction, tabuListSize, nbIterMax, getInitialSolution, maxTime)
 
         print(f"Cost: {tabuValue}")
         print(f"Time: {timeTaken} seconds")
@@ -124,20 +122,24 @@ def testImplicit(nbClasses, equityMax, maxTime):
     """
     Function to launch implicit search algorithm over the files.
     """
-    print(f"Implicit with {nbClasses} classes: \n")
+    print(f"Implicit search with {nbClasses} classes: \n")
 
     for filename in filenames:
         graph = loadGraph(f"{folder}/{filename}")
         print(filename)
 
-        implicitSolution, implicitValue, timeTaken = implicitSearch(graph, nbClasses, equityMax, maxTime)
+        implicitSolution, implicitValue, timeTaken, nbVisited = implicitSearch(graph, nbClasses, equityMax, maxTime)
 
-        print(f"Cost: {implicitValue}")
-        print(f"Time: {timeTaken} seconds")
-        print(implicitSolution)
-
-        # Just as a precaution
-        if not checkSolution(implicitSolution, nbClasses, True, equityMax):
-            print("/!\ invalid solution /!\ \n")
+        if implicitSolution == None:
+            print(f"No solution found in {maxTime} seconds.")
+        else:
+            print(f"Cost: {implicitValue}")
+            print(f"Time: {timeTaken} seconds")
+            print(f"Number of solutions visited: {nbVisited}")
+            if timeTaken >= maxTime:
+                print("Not finished")
+            print(implicitSolution)
+            if not checkSolution(implicitSolution, nbClasses, True, equityMax):
+                print("/!\ invalid solution /!\ ")
 
         print('\n')

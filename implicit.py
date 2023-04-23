@@ -69,8 +69,10 @@ def implicitSearch(graph, nbClasses, equityMax, maxTime):
     bestValue = 1000000000
     lastSolution = None
     lastValue = None
+    nbVisited = 0
 
     for currentSolution in solutions:
+        nbVisited += 1
         currentSolution = list(currentSolution)
         currentValue = computeValue(graph, lastSolution, lastValue, currentSolution)
         lastValue = currentValue
@@ -81,8 +83,8 @@ def implicitSearch(graph, nbClasses, equityMax, maxTime):
         timeLeft = maxTime - (perf_counter() - startTime)
         if timeLeft <= 0:
             totalTime = perf_counter() - startTime
-            return bestSolution, bestValue, totalTime
+            return bestSolution, bestValue, totalTime, nbVisited
 
 
     totalTime = perf_counter() - startTime
-    return bestSolution, bestValue, totalTime
+    return bestSolution, bestValue, totalTime, nbVisited
