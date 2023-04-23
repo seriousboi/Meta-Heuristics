@@ -1,10 +1,6 @@
--récupérer fichiers d'instances récents
 
--choisir définition d'équité, restreinte pour moins grand espace de solution, large pour avoir meilleur accès aux optimums locaux
-permissivité = 2 semble bon pour tout n classes
+-faire démarrer le gradient avec des solution dont la taille des partitions sont aléatoires
 
--la recherche exhaustive
+-faire tests
 
--voisinage PnD pour n classes
-
--choisir seconde métaheuristique
+-compléter rapport
