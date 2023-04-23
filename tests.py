@@ -4,16 +4,19 @@ from checker import checkSolution
 from exhaustive import exhaustiveSearch
 from gradients import gradient, getRandomSolution
 from simulatedAnnealing import simulatedAnnealingSimulation
+from tabu import tabuSimulation
+from implicit import implicitSearch
 from os import listdir
 
-# filenames = [
-# 'quatreSommets.txt','cinqSommets.txt','dixSommets.txt','quinzeSommets.txt','dixSeptSommets.txt',
-# 'vingtSommets.txt','vingtEtunSommets.txt','vingtDeuxSommets.txt','vingtTroisSommets.txt','vingtQuatreSommets.txt','vingtCinqSommets.txt',
-# 'trenteSommets.txt','cinquanteSommets.txt','centSommets.txt','cinqCentSommets.txt','milleSommets.txt'
-# ]
-
 folder = "data"
-filenames = listdir(folder)
+
+filenames = [
+'quatreSommets.txt','cinqSommets.txt','dixSommets.txt','quinzeSommets.txt','dixSeptSommets.txt',
+'vingtSommets.txt','vingtEtunSommets.txt','vingtDeuxSommets.txt','vingtTroisSommets.txt','vingtQuatreSommets.txt','vingtCinqSommets.txt',
+'trenteSommets.txt','cinquanteSommets.txt','centSommets.txt','cinqCentSommets.txt','milleSommets.txt'
+]
+
+# filenames = listdir(folder)
 
 def testExhaustive(nbClasses,equityMax,maxTime = None,maxIterations = None):
     global filenames
@@ -66,7 +69,9 @@ def testGradient(nbClasses,equityMax,neighborhoodFunction,maxTime,nbImprovToBrea
 
 
 def testSimulatedAnnealing(nbClasses, equityMax, neighborhoodFunction, initialTemperature, nbChangeTemperature, MU, nbIterMaxFunction, maxTime):
-
+    """
+    Function to launch simulated annealing algorithm over the files.
+    """
     print(f"Simulated annealing with {nbClasses} classes: \n")
 
     shutdownTemperature = 1000 * MU**nbChangeTemperature
@@ -76,7 +81,7 @@ def testSimulatedAnnealing(nbClasses, equityMax, neighborhoodFunction, initialTe
         graph = loadGraph(f"{folder}/{filename}")
         print(filename)
 
-        nbIterMax = nbIterMaxFunction(len(graph.vertices))
+        nbIterMax = nbIterMaxFunction(graph.nbVertices)
         simulatedAnnealingSolution, simulatedAnnealingValue, timeTaken = simulatedAnnealingSimulation(graph, nbClasses, equityMax, neighborhoodFunction, \
         initialTemperature, shutdownTemperature, g, nbIterMax, maxTime)
 
@@ -86,6 +91,53 @@ def testSimulatedAnnealing(nbClasses, equityMax, neighborhoodFunction, initialTe
 
         # Just as a precaution
         if not checkSolution(simulatedAnnealingSolution, nbClasses, True, equityMax):
+            print("/!\ invalid solution /!\ \n")
+
+        print('\n')
+
+
+def testTabu(nbClasses, equityMax, neighborhoodFunction, tabuListSize, nbIterMaxFunction, maxTime):
+    """
+    Function to launch tabu search algorithm over the files.
+    """
+    print(f"Tabu with {nbClasses} classes: \n")
+
+    for filename in filenames:
+        graph = loadGraph(f"{folder}/{filename}")
+        print(filename)
+
+        nbIterMax = nbIterMaxFunction(graph.nbVertices)
+        tabuSolution, tabuValue, timeTaken = tabuSimulation(graph, nbClasses, equityMax, neighborhoodFunction, tabuListSize, nbIterMax, maxTime)
+
+        print(f"Cost: {tabuValue}")
+        print(f"Time: {timeTaken} seconds")
+        print(tabuSolution)
+
+        # Just as a precaution
+        if not checkSolution(tabuSolution, nbClasses, True, equityMax):
+            print("/!\ invalid solution /!\ \n")
+
+        print('\n')
+
+
+def testImplicit(nbClasses, equityMax, maxTime):
+    """
+    Function to launch implicit search algorithm over the files.
+    """
+    print(f"Implicit with {nbClasses} classes: \n")
+
+    for filename in filenames:
+        graph = loadGraph(f"{folder}/{filename}")
+        print(filename)
+
+        implicitSolution, implicitValue, timeTaken = implicitSearch(graph, nbClasses, equityMax, maxTime)
+
+        print(f"Cost: {implicitValue}")
+        print(f"Time: {timeTaken} seconds")
+        print(implicitSolution)
+
+        # Just as a precaution
+        if not checkSolution(implicitSolution, nbClasses, True, equityMax):
             print("/!\ invalid solution /!\ \n")
 
         print('\n')

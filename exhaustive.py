@@ -1,4 +1,4 @@
-from checker import *
+from checker import checkSolution
 from time import time
 from copy import copy
 

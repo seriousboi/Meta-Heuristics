@@ -1,4 +1,3 @@
-from neighborhoods import randomPickNDropNeighborhood
 from gradients import getRandomSolution
 from random import choice, random
 from time import perf_counter
@@ -41,7 +40,7 @@ def simulatedAnnealing(graph, nbClasses, equityMax, initialSolution, neighborhoo
     while T > shutdownTemperature:
         nbIter = 0
         while nbIter < nbIterMax and (perf_counter() - startTime) <= timeLeft: # We also check the left time
-            newSolution, newValue = neighborhoodFunction(graph, currentSolution, currentValue, nbClasses, equityMax)
+            newSolution, newValue = list(neighborhoodFunction(graph, currentSolution, currentValue, nbClasses, equityMax, random = True))[0]
             diff_values = newValue - currentValue
             if diff_values < 0:
                 currentSolution = newSolution
