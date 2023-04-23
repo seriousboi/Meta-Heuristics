@@ -24,7 +24,7 @@ def checkSolution(solution, nbClasses, verbose = False, equityMax = 2):
     #on vérifie l'équité
     if not abs(max - min) <=  equityMax:
         if verbose:
-            print("Equity not respected, difference between",min,"and",max,"is above",equityMax,"%")
+            print("Equity not respected, difference between",min,"and",max,"is above",equityMax)
         return False
 
     #on vérifie qu'il y a le bon nombre de classes
