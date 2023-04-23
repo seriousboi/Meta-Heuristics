@@ -11,11 +11,11 @@ MU = 0.85
 nbChangeTemperature = 50
 nbIterMaxFunction = lambda n : n**2 / 2 # with n the size of our problem (or rather the number of vertices to assign).
 tabuListSize = 7
-neighborhoodFunction = pickNDropNeighborhood
+neighborhoodFunction = swapNeighborhood # pickNDropNeighborhood
 getInitialSolution = getGradientSolution
 
 # testExhaustive(nbClasses, equityMax, maxTime)
-# testGradient(nbClasses, equityMax, neighborhoodFunction, maxTime, nbImprovToBreak = None, useBlocks = False)
+testGradient(nbClasses, equityMax, neighborhoodFunction, maxTime, nbImprovToBreak = None, useBlocks = False)
 # testSimulatedAnnealing(nbClasses, equityMax, neighborhoodFunction, initialTemperature, nbChangeTemperature, MU, nbIterMaxFunction, getInitialSolution, maxTime)
 # testTabu(nbClasses, equityMax, neighborhoodFunction, tabuListSize, nbIterMaxFunction, getInitialSolution, maxTime)
-testImplicit(nbClasses, equityMax, maxTime)
+# testImplicit(nbClasses, equityMax, maxTime)

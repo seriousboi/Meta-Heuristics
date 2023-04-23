@@ -40,7 +40,7 @@ def implicitSearch(graph, nbClasses, equityMax, maxTime):
     startTime = perf_counter()
     classes = [i for i in range(nbClasses)]
 
-    if nbClasses != 2: # i.e. greater to 2
+    if nbClasses != 2 or equityMax != 2: # i.e. nbClasses greater to 2 or equityMax != 2
 
         def iteratorChecker(s):
             """
@@ -58,11 +58,11 @@ def implicitSearch(graph, nbClasses, equityMax, maxTime):
 
             solutions = filterfalse(lambda s : not iteratorChecker(s), product(range(nbClasses), repeat = graph.nbVertices))
 
-    else: # Equals to 2
+    else: # nbClasses quals to 2 and equityMax = 2
         if graph.nbVertices % 2 == 0: # i.e. an even number
-            possibleValues = (int(graph.nbVertices / nbClasses), int((graph.nbVertices / nbClasses - 1)), int((graph.nbVertices / nbClasses + 1)))
+            possibleValues = [int(graph.nbVertices / nbClasses), int((graph.nbVertices / nbClasses - 1))] #, int((graph.nbVertices / nbClasses + 1)))
         else: # An odd number
-            possibleValues = (int((graph.nbVertices - 1) / nbClasses), int((graph.nbVertices - 1) / nbClasses + 1))
+            possibleValues = [int((graph.nbVertices - 1) / nbClasses)] #, int((graph.nbVertices - 1) / nbClasses + 1))
         solutions = filterfalse(lambda s : s.count(0) not in possibleValues, product(range(nbClasses), repeat = graph.nbVertices))
 
     bestSolution = None

@@ -52,7 +52,7 @@ def findNbBlocks(nbNeighbors):
     The function compute the greater divider of a number different from itself.
     """
     nbBlocks = 1
-    for x in range(floor(nbNeighbors) / 2), 2, -1):
+    for x in range(floor(nbNeighbors) / 2, 2, -1):
         if nbNeighbors % x == 0:
             nbBlocks = x
             break
@@ -72,6 +72,7 @@ def gradientIterarion(graph, currentSolution, neighborhoodFunction, nbImprovToBr
 
     # le type de voisinage est modulable dans les paramètres
     neighborhood = list(neighborhoodFunction(graph, currentSolution, initialValue))
+    nbNeighbors = len(neighborhood)
 
     # utilisation des blocs
     if usedBlock != None:
@@ -84,8 +85,7 @@ def gradientIterarion(graph, currentSolution, neighborhoodFunction, nbImprovToBr
     nbSol = 0
 
     for neighbor, neighborValue in neighborhood:
-        nbSol += 1
-        while nbSol <= nbSolPerBlock:
+        while nbSol < nbSolPerBlock:
             # on incrémente le compteur d'améliorations
             if  neighborValue < initialValue:
                 nbImprov += 1
@@ -98,6 +98,7 @@ def gradientIterarion(graph, currentSolution, neighborhoodFunction, nbImprovToBr
             # on sort de l'itération si on a atteint le nombre d'améliorations voulues
             if nbImprovToBreak != None and nbImprov == nbImprovToBreak:
                 return currentSolution, currentValue
+            nbSol += 1
 
 
     return currentSolution, currentValue

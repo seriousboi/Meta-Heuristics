@@ -10,7 +10,7 @@ def getOppositeEndOfEdge(vertexId,edge):
         return edge.start
 
 
-def swapNeighborhood(graph,solution,value):
+def swapNeighborhood(graph, solution, value, nbClasses = None, equityMax = None):
     neighborhood = []
 
     #on fait une double boucle sur le tableau avec swapIndex1 < swapIndex2 pour éviter les symétries
@@ -53,7 +53,7 @@ def swapNeighborhood(graph,solution,value):
                 yield neighbor,neighborValue
 
 
-def pickNDropNeighborhood(graph, solution, value, nbClasses, equityMax, random = False, getMovement = False):
+def pickNDropNeighborhood(graph, solution, value, nbClasses = 2, equityMax = 2, random = False, getMovement = False):
     """
     Function to compute neighbors of a given solution using Pick'n'Drop (random)
     """
