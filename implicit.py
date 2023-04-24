@@ -56,7 +56,7 @@ def implicitSearch(graph, nbClasses, equityMax, maxTime):
 
             return True
 
-            solutions = filterfalse(lambda s : not iteratorChecker(s), product(range(nbClasses), repeat = graph.nbVertices))
+        solutions = filterfalse(lambda s : not iteratorChecker(s), product(range(nbClasses), repeat = graph.nbVertices))
 
     else: # Equals to 2
         if graph.nbVertices % 2 == 0: # i.e. an even number
