@@ -103,11 +103,11 @@ def testAllMethodsOnInstance(graph,nbClasses,maxTime):
     g = lambda T: MU * T
 
     print("gradSwap")
-    gradSwapSolution, gradSwapValue, gradSwapTimeTaken = gradient(graph, nbClasses, swapNeighborhood, maxTime,4)
+    gradSwapSolution, gradSwapValue, gradSwapTimeTaken = gradient(graph, nbClasses, equityMax, swapNeighborhood, maxTime,4)
     print(gradSwapValue)
 
     print("gradPnD")
-    gradPnDSolution, gradPnDValue, gradPnDTimeTaken = gradient(graph, nbClasses, pickNDropNeighborhood, maxTime,4)
+    gradPnDSolution, gradPnDValue, gradPnDTimeTaken = gradient(graph, nbClasses, equityMax, pickNDropNeighborhood, maxTime,4)
     print(gradPnDValue)
 
     print("SA")
@@ -193,7 +193,7 @@ def testGradient(nbClasses, equityMax, neighborhoodFunction, maxTime, nbImprovTo
         graph = loadGraph(f"{folder}/{filename}")
         print(filename)
 
-        gradientSolution, gradientValue, timeTaken = gradient(graph, nbClasses, neighborhoodFunction, maxTime, nbImprovToBreak)
+        gradientSolution, gradientValue, timeTaken = gradient(graph, nbClasses, equityMax, neighborhoodFunction, maxTime, nbImprovToBreak)
         print(f"Cost: {gradientValue}")
         print(f"Time: {timeTaken} seconds")
         print(gradientSolution)

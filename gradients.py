@@ -4,7 +4,7 @@ from randomSolution import getRandomSolution
 from math import floor
 
 
-def gradient(graph, nbClasses, neighborhoodFunction, maxTime, nbImprovToBreak = None, useBlocks = False):
+def gradient(graph, nbClasses, equityMax, neighborhoodFunction, maxTime, nbImprovToBreak = None, useBlocks = False):
     startTime = perf_counter()
     timeLeft = maxTime
 
@@ -13,7 +13,7 @@ def gradient(graph, nbClasses, neighborhoodFunction, maxTime, nbImprovToBreak = 
 
     while timeLeft >= 0:
         randomSolution = getRandomSolution(graph, nbClasses)
-        newSolution, newValue = gradientDescent(graph, randomSolution, neighborhoodFunction, nbImprovToBreak, useBlocks)
+        newSolution, newValue = gradientDescent(graph, nbClasses, equityMax, randomSolution, neighborhoodFunction, nbImprovToBreak, useBlocks)
 
         if newValue < bestValue:
 
@@ -27,7 +27,7 @@ def gradient(graph, nbClasses, neighborhoodFunction, maxTime, nbImprovToBreak = 
     return bestSolution, bestValue, totalTime
 
 
-def gradientDescent(graph, initialSolution, neighborhoodFunction, nbImprovToBreak, useBlocks):
+def gradientDescent(graph, nbClasses, equityMax, initialSolution, neighborhoodFunction, nbImprovToBreak, useBlocks):
     currentSolution = initialSolution
     currentValue = graph.getValueFromSolution(currentSolution)
 
@@ -35,7 +35,7 @@ def gradientDescent(graph, initialSolution, neighborhoodFunction, nbImprovToBrea
     valueCanImprove = True
     while valueCanImprove:
 
-        newSolution, newValue = gradientIterarion(graph, currentSolution, neighborhoodFunction, nbImprovToBreak, usedBlock = None)
+        newSolution, newValue = gradientIterarion(graph, nbClasses, equityMax, currentSolution, neighborhoodFunction, nbImprovToBreak, usedBlock = None)
 
         if newValue < currentValue:
             currentSolution = newSolution
@@ -60,7 +60,7 @@ def findNbBlocks(nbNeighbors):
     return nbBlocks
 
 
-def gradientIterarion(graph, currentSolution, neighborhoodFunction, nbImprovToBreak, usedBlock):
+def gradientIterarion(graph, nbClasses, equityMax, currentSolution, neighborhoodFunction, nbImprovToBreak, usedBlock):
     """
     Function to find one of the best value of neighborhood of a solution (depending of used criterion).
     """
@@ -71,7 +71,7 @@ def gradientIterarion(graph, currentSolution, neighborhoodFunction, nbImprovToBr
     initialValue = currentValue
 
     # le type de voisinage est modulable dans les paramètres
-    neighborhood = list(neighborhoodFunction(graph, currentSolution, initialValue))
+    neighborhood = list(neighborhoodFunction(graph, currentSolution, initialValue, nbClasses, equityMax))
     nbNeighbors = len(neighborhood)
 
     # utilisation des blocs
