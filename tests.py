@@ -3,6 +3,7 @@ from structures import Graph
 from checker import checkSolution
 from exhaustive import exhaustiveSearch
 from gradients import gradient
+from initialSolution import *
 from simulatedAnnealing import simulatedAnnealingSimulation
 from tabu import tabuSimulation
 from implicit import implicitSearch
@@ -73,7 +74,7 @@ def getOptimums(maxTime):
             print("instance",filename)
             print(graph.nbVertices, "vertices to split in",nbClasses,"classes")
 
-            implicitSolution, implicitValue, timeTaken = implicitSearch(graph, nbClasses, equityMax, maxTime)
+            implicitSolution, implicitValue, timeTaken, nbVisited = implicitSearch(graph, nbClasses, equityMax, maxTime)
 
             if timeTaken < maxTime:
                 optimums[nbClasses][filename] = implicitValue
