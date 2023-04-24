@@ -10,7 +10,7 @@ def getOppositeEndOfEdge(vertexId,edge):
         return edge.start
 
 
-def swapNeighborhood(graph, solution, value, nbClasses = None, equityMax = None):
+def swapNeighborhood(graph, solution, value, nbClasses = None, equityMax = None,):
     neighborhood = []
 
     #on fait une double boucle sur le tableau avec swapIndex1 < swapIndex2 pour éviter les symétries
@@ -86,7 +86,8 @@ def pickNDropNeighborhood(graph, solution, value, nbClasses = 2, equityMax = 2, 
     else: # All the neighbors
         for v in vertices:
             possible_classes_v = copy(possible_classes)
-            possible_classes_v.remove(solution[v]) # All the POSSIBLE classes (i.e. without the current class of vertex 'v')
+            if solution[v] in possible_classes_v:
+                possible_classes_v.remove(solution[v]) # All the POSSIBLE classes (i.e. without the current class of vertex 'v')
             for c in possible_classes_v:
                 neighbor = copy(solution)
                 neighbor[v] = c

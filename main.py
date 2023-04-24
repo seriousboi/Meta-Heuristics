@@ -1,4 +1,3 @@
-from neighborhoods import swapNeighborhood, pickNDropNeighborhood
 from tests import *
 
 nbClasses = 2
@@ -9,7 +8,8 @@ MU = 0.85
 nbChangeTemperature = 50
 nbIterMaxFunction = lambda n : n**2 / 2 # with n the size of our problem (or rather the number of vertices to assign).
 tabuListSize = 7
-neighborhoodFunction = swapNeighborhood # pickNDropNeighborhood
+neighborhoodFunction = pickNDropNeighborhood # pickNDropNeighborhood
+getInitialSolution = getRandomSolution
 
 #testExhaustive(nbClasses, equityMax, maxTime)
 # testGradient(nbClasses, equityMax, swapNeighborhood, maxTime)
@@ -18,4 +18,4 @@ neighborhoodFunction = swapNeighborhood # pickNDropNeighborhood
 # testImplicit(nbClasses, equityMax, maxTime)
 
 
-getOptimums(300)
+testEverything(4)

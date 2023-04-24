@@ -1,3 +1,4 @@
+from neighborhoods import *
 from random import choice, random
 from time import perf_counter
 from math import exp, log
@@ -43,7 +44,9 @@ positiveDecreasingFunction, nbIterMax, timeLeft):
     while T > shutdownTemperature:
         nbIter = 0
         while nbIter < nbIterMax and (perf_counter() - startTime) <= timeLeft: # We also check the left time
-            newSolution, newValue = list(neighborhoodFunction(graph, currentSolution, currentValue, nbClasses, equityMax, random = True))[0]
+
+            newSolution, newValue = list(neighborhoodFunction(graph, currentSolution, currentValue, nbClasses, equityMax,random = True))[0]
+
             diff_values = newValue - currentValue
             if diff_values < 0:
                 currentSolution = newSolution
@@ -66,7 +69,10 @@ def computeInitialTemperature(graph, nbClasses, equityMax, initialSolution, init
     """
     Function to compute initial temperature from 'acceptanceRate' for simulated annealing algorithm.
     """
-    neighbors = neighborhoodFunction(graph, initialSolution, initialValue, nbClasses, equityMax, random = False) # All the neighbors
+
+    # All the neighbors
+    neighbors = neighborhoodFunction(graph, initialSolution, initialValue, nbClasses, equityMax,random=False)
+
     n = 0
     fitnessGap = []
     neighbors = list(neighbors)
