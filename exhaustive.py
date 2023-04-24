@@ -3,20 +3,20 @@ from time import time
 from copy import copy
 
 
-
 def exhaustiveSearch(graph,nbClasses,maxTime):
     startTime = time()
 
     currentSolution = [0]*graph.nbVertices
     bestSolution = None
     bestValue = 1000000000
-
+    nbVisited = 0
     finalArray = [nbClasses-1]*graph.nbVertices
+
     while currentSolution != finalArray:
 
         #sous optimal, on parcourt tout les mots binaires possibles
         nextSolution(currentSolution,nbClasses)
-
+        nbVisited += 1
         #sous optimal, on recalcule la taille de la partition à chaque fois
         if checkSolution(currentSolution,nbClasses,False,2):
 
@@ -31,11 +31,10 @@ def exhaustiveSearch(graph,nbClasses,maxTime):
         timeLeft = maxTime - (time() - startTime)
         if timeLeft <= 0:
             totalTime = time() - startTime
-            return bestSolution,totalTime
+            return bestSolution, bestValue, totalTime, nbVisited
 
     totalTime = time() - startTime
-    return bestSolution,totalTime
-
+    return bestSolution, bestValue, totalTime, nbVisited
 
 
 def nextSolution(solution,nbClasses):

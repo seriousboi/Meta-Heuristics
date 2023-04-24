@@ -1,51 +1,33 @@
-from neighborhoods import *
 from random import choice
-from time import time
+from time import perf_counter
+from randomSolution import getRandomSolution
+from math import floor
 
 
-
-def gradient(graph,nbClasses,neighborhoodFunction,maxTime,nbImprovToBreak = None):
-    startTime = time()
+def gradient(graph, nbClasses, neighborhoodFunction, maxTime, nbImprovToBreak = None, useBlocks = False):
+    startTime = perf_counter()
     timeLeft = maxTime
 
     bestSolution = None
     bestValue = 1000000000
 
     while timeLeft >= 0:
+        randomSolution = getRandomSolution(graph, nbClasses)
+        newSolution, newValue = gradientDescent(graph, randomSolution, neighborhoodFunction, nbImprovToBreak, useBlocks)
 
-        randomSolution = getRandomSolution(graph.nbVertices,nbClasses)
-        newSolution = gradientDescent(graph,randomSolution,neighborhoodFunction,nbImprovToBreak)
-
-        newValue = graph.getValueFromSolution(newSolution)
         if newValue < bestValue:
 
             bestSolution = newSolution
             bestValue = newValue
 
-        timeLeft = maxTime - (time() - startTime)
+        timeLeft = maxTime - (perf_counter() - startTime)
 
-    totalTime = time() - startTime
-    
-    return bestSolution,totalTime
+    totalTime = perf_counter() - startTime
 
-
-
-def getRandomSolution(nbVertices,nbClasses):
-    verticesToAssign = [index for index in range(nbVertices)]
-    solution = [None]*nbVertices
-
-    for step in range(nbVertices):
-        classIndex = step%nbClasses
-        vertexToAssign = choice(verticesToAssign)
-
-        solution[vertexToAssign] = classIndex
-        verticesToAssign.remove(vertexToAssign)
-
-    return solution
+    return bestSolution, bestValue, totalTime
 
 
-
-def gradientDescent(graph,initialSolution,neighborhoodFunction,nbImprovToBreak):
+def gradientDescent(graph, initialSolution, neighborhoodFunction, nbImprovToBreak, useBlocks):
     currentSolution = initialSolution
     currentValue = graph.getValueFromSolution(currentSolution)
 
@@ -53,41 +35,70 @@ def gradientDescent(graph,initialSolution,neighborhoodFunction,nbImprovToBreak):
     valueCanImprove = True
     while valueCanImprove:
 
-        currentSolution = gradientIterarion(graph,currentSolution,neighborhoodFunction,nbImprovToBreak)
-        newValue = graph.getValueFromSolution(currentSolution)
+        newSolution, newValue = gradientIterarion(graph, currentSolution, neighborhoodFunction, nbImprovToBreak, usedBlock = None)
 
         if newValue < currentValue:
+            currentSolution = newSolution
             currentValue = newValue
         else:
             valueCanImprove = False
 
-    return currentSolution
+    return currentSolution, currentValue
 
 
+def findNbBlocks(nbNeighbors):
+    """
+    Function to find the maximal number of similar blocks for split neighborhood of a solution in gradient algorithm.
+    The function compute the greater divider of a number different from itself.
+    """
+    nbBlocks = 1
+    for x in range(floor(nbNeighbors) / 2, 2, -1):
+        if nbNeighbors % x == 0:
+            nbBlocks = x
+            break
 
-def gradientIterarion(graph,currentSolution,neighborhoodFunction,nbImprovToBreak):
+    return nbBlocks
+
+
+def gradientIterarion(graph, currentSolution, neighborhoodFunction, nbImprovToBreak, usedBlock):
+    """
+    Function to find one of the best value of neighborhood of a solution (depending of used criterion).
+    """
     currentValue = graph.getValueFromSolution(currentSolution)
 
-    #nombre de fois qu'on a trouvé une solution améliorante (relativement à la valeur initiale)
+    # nombre de fois qu'on a trouvé une solution améliorante (relativement à la valeur initiale)
     nbImprov = 0
     initialValue = currentValue
 
-    #le type de voisinage est modulable dans les paramètres
-    neighborhood = neighborhoodFunction(graph,currentSolution,initialValue)
-    for neighbor,neighborValue in neighborhood:
+    # le type de voisinage est modulable dans les paramètres
+    neighborhood = list(neighborhoodFunction(graph, currentSolution, initialValue))
+    nbNeighbors = len(neighborhood)
 
-        #on incrémente le compteur d'améliorations
-        if  neighborValue < initialValue:
-            nbImprov += 1
+    # utilisation des blocs
+    if usedBlock != None:
+        nbBlocks = findNbBlocks(nbNeighbors)
+        nbSolPerBlock = int(nbNeighbors / nbBlocks)
+        nbSol = nbSolPerBlock * usedBlock
+    else:
+        nbSolPerBlock = nbNeighbors
 
-        #on change la solution courrante si la nouvelle est meilleure
-        if neighborValue < currentValue:
-            currentSolution = neighbor
-            currentValue = neighborValue
+    nbSol = 0
 
-        #on sort de l'itération si on a atteint le nombre d'améliorations voulues
-        if nbImprovToBreak != None and nbImprov == nbImprovToBreak:
-            return currentSolution
+    for neighbor, neighborValue in neighborhood:
+        while nbSol < nbSolPerBlock:
+            # on incrémente le compteur d'améliorations
+            if  neighborValue < initialValue:
+                nbImprov += 1
+
+            # on change la solution courrante si la nouvelle est meilleure
+            if neighborValue < currentValue:
+                currentSolution = neighbor
+                currentValue = neighborValue
+
+            # on sort de l'itération si on a atteint le nombre d'améliorations voulues
+            if nbImprovToBreak != None and nbImprov == nbImprovToBreak:
+                return currentSolution, currentValue
+            nbSol += 1
 
 
-    return currentSolution
+    return currentSolution, currentValue
