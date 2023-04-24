@@ -50,7 +50,6 @@ def testEverything(maxTime,startStep = 0):
 
                 results += [[filename,graph.nbVertices,nbClasses,gradSwapValue,gradPnDValue,SAValue,tabuValue,gradSwapSuccess,gradPnDSuccess,SASuccess,tabuSuccess]]
 
-                print(step+1,"steps done")
                 print()
 
             step += 1
@@ -58,36 +57,6 @@ def testEverything(maxTime,startStep = 0):
     resultsDF = pd.DataFrame(results,columns=["Instance","Sommets","Classes","Valeur gardient swap","Valeur gradient PnD","Valeur recuit simulé","Valeur méthode tabou","Succès gardient swap","Succès gradient PnD","Succès recuit simulé","Succès méthode tabou"])
     print(resultsDF)
     resultsDF.to_csv("results.csv", sep=';')
-
-def testForSuccess(maxTime,startStep = 0):
-    step = 0
-    nbClasses = 2
-
-
-    for filename in goodFilenames:
-
-        if step >= startStep and filename in optimums[nbClasses]:
-            graph = loadGraph(f"{folder}/{filename}")
-            print("instance",filename)
-            print(graph.nbVertices, "vertices to split in",nbClasses,"classes")
-
-            gradSwapValue,gradPnDValue,SAValue,tabuValue = testAllMethodsOnInstance(graph,nbClasses,maxTime)
-
-            optimum = optimums[nbClasses][filename]
-            gradSwapSuccess = gradSwapValue/optimum <= successLeniency
-            gradPnDSuccess = gradPnDValue/optimum <= successLeniency
-            SASuccess = SAValue/optimum <= successLeniency
-            tabuSuccess = tabuValue/optimum <= successLeniency
-
-            print(gradSwapSuccess,gradPnDSuccess,SASuccess,tabuSuccess)
-
-            print(step+1,"steps done")
-            print()
-
-        step += 1
-
-    pd.DataFrame(durationsDF,columns=["Usine"]+headsetsNames+["Heures Disponibles"])
-
 
 
 

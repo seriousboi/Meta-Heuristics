@@ -2,7 +2,7 @@ from tests import *
 
 nbClasses = 2
 equityMax = 2
-maxTime = 15 #temps max en secondes
+maxTime = 2 #temps max en secondes
 initialTemperature = None
 MU = 0.85
 nbChangeTemperature = 50
@@ -11,11 +11,10 @@ tabuListSize = 7
 neighborhoodFunction = pickNDropNeighborhood # pickNDropNeighborhood
 getInitialSolution = getRandomSolution
 
-#testExhaustive(nbClasses, equityMax, maxTime)
-# testGradient(nbClasses, equityMax, swapNeighborhood, maxTime)
-# testSimulatedAnnealing(nbClasses, equityMax, pickNDropNeighborhood, initialTemperature, nbChangeTemperature, MU, nbIterMaxFunction, maxTime)
-# testTabu(nbClasses, equityMax, pickNDropNeighborhood, tabuListSize, nbIterMaxFunction, maxTime)
-# testImplicit(nbClasses, equityMax, maxTime)
+#testImplicit(nbClasses, equityMax, maxTime)
+#testGradient(nbClasses, equityMax, swapNeighborhood, maxTime)
+#testSimulatedAnnealing(nbClasses, equityMax, pickNDropNeighborhood, initialTemperature, nbChangeTemperature, MU, nbIterMaxFunction,getRandomSolution,maxTime)
+#testTabu(nbClasses, equityMax, pickNDropNeighborhood, tabuListSize, nbIterMaxFunction,getRandomSolution,maxTime)
 
 
-testEverything(4)
+testEverything(maxTime)
